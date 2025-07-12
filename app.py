@@ -1,5 +1,6 @@
 from flask import Flask, request
 import requests
+import os
 
 app = Flask(__name__)
 contextos = {}
@@ -23,7 +24,7 @@ def webhook():
     return f"<Response><Message>{respuesta_watson}</Message></Response>", 200, {'Content-Type': 'text/xml'}
 
 def enviar_a_watson(mensaje, session_id):
-    url = "https://api.us-south.assistant.watson.cloud.ibm.com/instances/dbec99ff-fe74-43a5-989c-2ef686aa7c9f"
+    url = "https://api.us-south.assistant.watson.cloud.ibm.com/v1/workspaces/32377d24-84c4-43aa-9c12-4f0a2a21de42/message?version=2021-06-14"
     auth = ("apikey", "O7cWhbMQ1oJPx-IpcxNVMXxy8nGa2L7fz873rOG_4bcA")
 
     contexto_prev = contextos.get(session_id, {})
@@ -55,4 +56,5 @@ def enviar_a_watson(mensaje, session_id):
         return "⚠️ Error interno del servidor."
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
