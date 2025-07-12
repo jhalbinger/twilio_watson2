@@ -18,11 +18,13 @@ def webhook():
     tipo_mensaje = request.form.get("NumMedia", "0")
 
     if not mensaje:
-        return "⚠️ No se recibió ningún mensaje de texto."
+        return """<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Message>⚠️ No se recibió ningún mensaje de texto.</Message>
+</Response>""", 200, {"Content-Type": "application/xml"}
 
     respuesta = enviar_a_watson(mensaje, numero_limpio)
 
-    # Respuesta en formato TwiML para que Twilio la entienda correctamente
     return f"""<?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Message>{respuesta}</Message>
