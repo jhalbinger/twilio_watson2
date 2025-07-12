@@ -1,5 +1,7 @@
 from flask import Flask, request
 import requests
+import os
+import json
 
 app = Flask(__name__)
 contextos = {}
@@ -16,15 +18,14 @@ def webhook():
     tipo_mensaje = request.form.get("NumMedia", "0")
 
     if not mensaje:
-        return "⚠️ No se recibió texto para procesar."
+        return "⚠️ No se recibió ningún mensaje de texto."
 
     respuesta = enviar_a_watson(mensaje, numero_limpio)
     return respuesta
 
 def enviar_a_watson(mensaje, session_id):
-    url = "https://api.us-south.assistant.watson.cloud.ibm.com/v1/workspaces/a17b54a3-ea98-4362-9766-c76e17484475/message?version=2021-06-14"
+    url = "https://api.us-south.assistant.watson.cloud.ibm.com/instances/dbec99ff-fe74-43a5-989c-2ef686aa7c9f/v1/workspaces/bc5f4504-d219-4792-aea5-cfbdb2c0b0f7/message?version=2021-06-14"
     auth = ("apikey", "O7cWhbMQ1oJPx-IpcxNVMXxy8nGa2L7fz873rOG_4bcA")
-    
     contexto_prev = contextos.get(session_id, {})
     contexto_prev["telefono"] = session_id
 
@@ -47,4 +48,5 @@ def enviar_a_watson(mensaje, session_id):
         return "⚠️ Ocurrió un error al contactar al bot."
 
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
