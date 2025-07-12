@@ -21,10 +21,15 @@ def webhook():
         return "⚠️ No se recibió ningún mensaje de texto."
 
     respuesta = enviar_a_watson(mensaje, numero_limpio)
-    return respuesta
+
+    # Respuesta en formato TwiML para que Twilio la entienda correctamente
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Message>{respuesta}</Message>
+</Response>""", 200, {"Content-Type": "application/xml"}
 
 def enviar_a_watson(mensaje, session_id):
-    url = "https://api.us-south.assistant.watson.cloud.ibm.com/instances/dbec99ff-fe74-43a5-989c-2ef686aa7c9f/v1/workspaces/bc5f4504-d219-4792-aea5-cfbdb2c0b0f7/message?version=2021-06-14"
+    url = "https://api.us-south.assistant.watson.cloud.ibm.com/instances/dbec99ff-fe74-43a5-989c-2ef686aa7c9f/v1/workspaces/32377d24-84c4-43aa-9c12-4f0a2a21de42/message?version=2021-06-14"
     auth = ("apikey", "O7cWhbMQ1oJPx-IpcxNVMXxy8nGa2L7fz873rOG_4bcA")
     contexto_prev = contextos.get(session_id, {})
     contexto_prev["telefono"] = session_id
