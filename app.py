@@ -23,7 +23,7 @@ def webhook():
     return f"<Response><Message>{respuesta_watson}</Message></Response>", 200, {'Content-Type': 'text/xml'}
 
 def enviar_a_watson(mensaje, session_id):
-    url = "https://api.us-south.assistant.watson.cloud.ibm.com/v1/workspaces/a17b54a3-ea98-4362-9766-c76e17484475/message?version=2021-06-14"
+    url = "https://api.us-south.assistant.watson.cloud.ibm.com/v1/workspaces/32377d24-84c4-43aa-9c12-4f0a2a21de42/message"
     auth = ("apikey", "O7cWhbMQ1oJPx-IpcxNVMXxy8nGa2L7fz873rOG_4bcA")
 
     contexto_prev = contextos.get(session_id, {})
