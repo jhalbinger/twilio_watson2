@@ -1,6 +1,7 @@
 from flask import Flask, request
 import requests
 import os
+import json
 
 app = Flask(__name__)
 
@@ -60,6 +61,17 @@ def enviar_a_watson(mensaje, session_id):
 
 # === RESPUESTA PARA TWILIO/WHATSAPP ===
 def responder_whatsapp(texto):
+    # Si viene JSON desde Lovely, sacar la clave "respuesta"
+    try:
+        data = json.loads(texto)
+        if "respuesta" in data:
+            texto = data["respuesta"]
+    except:
+        pass
+
+    # Escapar caracteres especiales para XML
+    texto = texto.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
     return f"<Response><Message>{texto}</Message></Response>", 200, {'Content-Type': 'text/xml'}
 
 if __name__ == "__main__":
